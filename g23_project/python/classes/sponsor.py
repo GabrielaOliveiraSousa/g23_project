@@ -1,7 +1,7 @@
 from classes.podcast import Podcast
 from classes.gclass import Gclass
 
-class PodcastSponsor(Gclass):
+class Sponsor(Gclass):
     obj = dict()
     lst = list()
     pos = 0
