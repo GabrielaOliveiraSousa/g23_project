@@ -1,11 +1,5 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Apr 20 18:11:52 2026
-
-@author: axlea
-"""
-from classes.gclass import Gclass
 from classes.podcast import Podcast
+from classes.gclass import Gclass
 
 class PodcastTheme(Gclass()):
     obj = dict()
