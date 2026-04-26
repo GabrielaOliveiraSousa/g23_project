@@ -8,20 +8,21 @@ class Sponsor(Gclass):
     sortkey = ''
     table='Sponsor'
     name='Sponsor'
-    att = ['_id','_extra_info','_podcast_id']
+    att = ['_id','_podcast_id','_extra_info']
     header = 'Sponsor'
-    des = ['Sponsor_id','Extra_info','Podcast_id']
-    def __init__(self, id, extra_info, podcast_id):
+    des = ['Sponsor_id','Podcast_id','Extra_info']
+    def __init__(self, id, podcast_id, extra_info):
         super().__init__()
-        id =Sponsor.get_id(id)
-        podcast_id =int(podcast_id)
+        id = Sponsor.get_id(id)
+        podcast_id = int(podcast_id)
         if podcast_id in Podcast.lst:
             self._id = id
-            self._extra_info=extra_info
+            self._extra_info = extra_info
             self._podcast_id = podcast_id
 
-            Sponsor.obj[id] = self
-            Sponsor.lst.append(id)
+            if id not in Sponsor.obj:
+                Sponsor.obj[id] = self
+                Sponsor.lst.append(id)
         else:
             print('Sponsor', podcast_id, ' not found')
     @property
