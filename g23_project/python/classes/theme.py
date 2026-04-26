@@ -28,7 +28,7 @@ class PodcastTheme(Gclass):
             return
 
         if podcast_id in Podcast.lst:
-            theme_id = PodcastTheme.get_theme_id(theme_id)
+            theme_id = PodcastTheme.get_id(theme_id)
             self._theme_id = theme_id
             self._subject = subject
             self._podcast_id = podcast_id
