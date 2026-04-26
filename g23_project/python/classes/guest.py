@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Apr 21 09:58:49 2026
 
 @author: GabrielaOliveiraSousa
 """
@@ -19,8 +18,9 @@ class Guest(Gclass):
         id = Guest.get_id(id)
         self._id = id
         self._name = name
-        Guest.obj[id] = self
-        Guest.lst.append(id)
+        if id not in Guest.obj:
+            Guest.obj[id] = self
+            Guest.lst.append(id)
     @property
     def id(self):
         return self._id
