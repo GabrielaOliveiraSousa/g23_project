@@ -5,15 +5,16 @@ class Podcast(Gclass):
     lst = list()
     pos = 0
     sortkey = ''
+    
     att = ['_podcast_id','_date','_category','_title']
     header = 'Podcasts'
     des = ['Podcast_Id','Date','Category','Title']
-    def __init__(self, id, date, category, title):
+    def __init__(self, id, date, category, title): 
         super().__init__()
         id = Podcast.get_id(id)
         self._podcast_id = id
+        self._date = datetime.date.fromisoformat(date) 
         self._category = category
-        self._date = datetime.date.fromisoformat(date)
         self._title = title
         Podcast.obj[id] = self
         Podcast.lst.append(id)
