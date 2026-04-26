@@ -8,7 +8,7 @@ Created on Mon Apr 20 18:11:52 2026
 from classes.podcast import Podcast
 from classes.gclass import Gclass
 
-class PodcastTheme(Gclass()):
+class PodcastTheme(Gclass):
     obj = dict()
     lst = list()
     pos = 0
@@ -18,19 +18,23 @@ class PodcastTheme(Gclass()):
     header = 'Theme'
     des = ['Theme_Id','Subject','Podcast_id']
 
-    def __init__(self, id, subject, podcast_id):
+    def __init__(self, theme_id, subject, podcast_id):
         super().__init__()
-        # Object attributes
-        # Check the customer referential integrity
-        podcast_id =int(podcast_id)
+
+        try:
+            podcast_id = int(podcast_id)
+        except ValueError:
+            print('Invalid podcast_id')
+            return
+
         if podcast_id in Podcast.lst:
-            id = PodcastTheme.get_theme_id(id)
-            self._theme_id = id
+            theme_id = PodcastTheme.get_theme_id(theme_id)
+            self._theme_id = theme_id
             self._subject = subject
             self._podcast_id = podcast_id
-            # Add the new object to the Order list
-            PodcastTheme.obj[id] = self
-            PodcastTheme.lst.append(id)
+
+            PodcastTheme.obj[theme_id] = self
+            PodcastTheme.lst.append(theme_id)
         else:
             print('Podcast ', podcast_id, ' not found')
 
