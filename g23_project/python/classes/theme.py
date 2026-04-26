@@ -4,73 +4,50 @@ Created on Mon Apr 20 18:11:52 2026
 
 @author: axlea
 """
-from classes.podcast import Podcast
 from classes.gclass import Gclass
+from classes.podcast import Podcast
 
-class PodcastTheme(Gclass):
+class Theme(Gclass):
     obj = dict()
     lst = list()
     pos = 0
     sortkey = ''
 
+    table = 'Theme'
+    name = 'Theme'
 
     att = ['_id', '_subject', '_podcast_id']
 
     header = 'Theme'
     des = ['Theme_Id', 'Subject', 'Podcast_id']
 
+    def _init_(self, id, subject, podcast_id):
+        super()._init_()
 
-    table = 'Theme'
-
-    def __init__(self, id, subject, podcast_id):
-        super().__init__()
-
-        try:
-            podcast_id = int(podcast_id)
-        except ValueError:
-            print('Invalid podcast_id')
-            return
+        podcast_id = int(podcast_id)
 
         if podcast_id not in Podcast.lst:
-            print('Podcast', podcast_id, 'not found')
             return
 
-
-        id = PodcastTheme.get_id(id)
-
+        id = Theme.get_id(id)
 
         self._id = id
         self._subject = subject
         self._podcast_id = podcast_id
 
-        PodcastTheme.obj[id] = self
-        PodcastTheme.lst.append(id)
+        Theme.obj[id] = self
+        Theme.lst.append(id)
 
-  
     @property
     def id(self):
-        return self._id
-
-    # opcional: manter compatibilidade com o nome antigo
-    @property
-    def theme_id(self):
         return self._id
 
     @property
     def subject(self):
         return self._subject
 
-    @subject.setter
-    def subject(self, subject):
-        self._subject = subject
-
     @property
     def podcast_id(self):
         return self._podcast_id
-
-    @podcast_id.setter
-    def podcast_id(self, podcast_id):
-        if podcast_id in Podcast.lst:
-            self._podcast_id = podcast_id
         else:
             print('Podcast', podcast_id, 'not found')
