@@ -7,7 +7,7 @@ class PodcastSponsor(Gclass):
     pos = 0
     sortkey = ''
     att = ['_sponsor_id','_extra_info','_podcast_id']
-    header = 'CustomerOrder'
+    header = 'PodcastSponsor'
     des = ['Sponsor_id','Extra_info','Podcast_id']
     def __init__(self, id, extra_info, podcast_id):
         super().__init__()
@@ -21,7 +21,7 @@ class PodcastSponsor(Gclass):
             PodcastSponsor.obj[id] = self
             PodcastSponsor.lst.append(id)
         else:
-            print('Customer ', podcast_id, ' not found')
+            print('Sponsor', podcast_id, ' not found')
     @property
     def id(self):
         return self._id
