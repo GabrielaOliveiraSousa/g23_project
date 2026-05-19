@@ -11,27 +11,19 @@ class Podcast(Gclass):
     header = 'Podcasts'
     des = ['Podcast_Id', 'Date', 'Category', 'Title']
     
-    def __init__(self, id, date, category, title): 
+    def __init__(self, id, title, category, date): 
         super().__init__()
-        if '/' in str(title) or (len(str(title)) == 10 and title.count('-') == 2):
-            real_date = title
-            real_title = category  
-            real_category = "Geral"
-        else:
-            real_date = date
-            real_category = category
-            real_title = title
-
+        
         id = Podcast.get_id(id)
         self._podcast_id = id
-        self._category = real_category
-        self._title = real_title
+        self._title = title
+        self._category = category
         
         try:
-            self._date = datetime.date.fromisoformat(str(real_date)) 
+            self._date = datetime.date.fromisoformat(str(date)) 
         except ValueError:
             try:
-                self._date = datetime.datetime.strptime(str(real_date), "%d/%m/%Y").date()
+                self._date = datetime.datetime.strptime(str(date), "%d/%m/%Y").date()
             except ValueError:
                 self._date = datetime.date.today()
 
@@ -55,7 +47,7 @@ class Podcast(Gclass):
     @property
     def date(self):
         return self._date
-    @date.setter
+    @id.setter 
     def date(self, date):
         self._date = date
 
