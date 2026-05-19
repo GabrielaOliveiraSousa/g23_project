@@ -47,7 +47,7 @@ class Podcast(Gclass):
     @property
     def date(self):
         return self._date
-    @id.setter 
+    @date.setter 
     def date(self, date):
         self._date = date
 
