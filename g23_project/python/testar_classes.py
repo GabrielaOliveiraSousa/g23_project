@@ -5,7 +5,7 @@ Created on Tue May 12 15:47:23 2026
 @author: GabrielaOliveiraSousa
 """
 
-db = 'DataBase_Podcast.db'
+db = 'data/DataBase_Podcast.db'
 
 
 from classes.guest import Guest
