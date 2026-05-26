@@ -1,49 +1,52 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue May 12 15:47:23 2026
-
 @author: GabrielaOliveiraSousa
 """
 
-db = 'data/DataBase_Podcast.db'
-
-
-from classes.guest import Guest
-test_class = Guest
-ob = '983;Anderson, Mcguire and Burke'
-
-
-from classes.podcast import Podcast
-test_class = Podcast
-ob = '150;21/03/2024;research;Beat'
-
-
-from classes.participation import Participation
-from classes.podcast import Podcast
-from classses.guest import Guest
-Podcast.read('data/DataBase_Podcast.db')
-Guest.read('data/DataBase_Podcast.db')
-test_class = Participation
-ob='Product1;10.9;100'
-
-
-from classes.theme import Theme
-from classes.podcast import Podcast
-Podcast.read('data/DataBase_Podcast.db')
-test_class = Theme
-
-
-from classes.sponsor import Sponsor
-test_class = Sponsor
-
 import datetime
+from classes.podcast import Podcast
+from classes.guest import Guest
+from classes.participation import Participation
+from classes.theme import Theme
+from classes.sponsor import Sponsor
 
-#Reads the test_class.csv file
-test_class.read('data/' + db)
+# =============================================================================
+# 1. CARREGAMENTO PRÉVIO DE DADOS
+# =============================================================================
+Podcast.read('data/DadaBase_Podcast.db')
+Guest.read('data/DadaBase_Podcast.db')
+
+# --- OPÇÃO A: TESTAR PARTICIPATION ---
+# test_class = Participation
+# ob = '150;983;2026-05-12;500'  # podcast_id(150); guest_id(983); data; quantidade
+
+# --- OPÇÃO B: TESTAR GUEST ---
+# test_class = Guest
+# ob = '999;Nome do Convidado'
+
+# --- OPÇÃO C: TESTAR PODCAST ---
+test_class = Podcast
+ob = '200;O Meu Novo Podcast;Saude;2026-05-12'
+
+# --- OPÇÃO D: TESTAR SPONSOR  ---
+# test_class = Sponsor
+# ob = '0;150;Anuncio de 30 segundos'  # id(0 para auto); podcast_id(150); info
+
+# --- OPÇÃO E: TESTAR THEME---
+# test_class = Theme
+# ob = '0;Tecnologia;150'  # id(0 para auto); subject; podcast_id(150)
+
+
+# =============================================================================
+# 3. INTERFACE DO MENU 
+# =============================================================================
+test_class.read('data/DadaBase_Podcast.db')
 
 op = ''
 while op != 'q':
     print('')
+    print(f'--- TESTING CLASS: {test_class.__name__} ---')
     print('Choose one letter for select the option')
     print('---------------')
     print('l - list')
@@ -61,9 +64,11 @@ while op != 'q':
     print('---------------')
     print('q - quit')
     print('---------------')
+    
     p = test_class.current()
     print(f'\n{p}')
     op = input('?')
+    
     if op == 'b':
         test_class.first()
     elif op == 'n':
@@ -98,13 +103,12 @@ while op != 'q':
                 strarg += f',{value}'
         strarg += ')'
         if p1 != None:
-            # test_class.lst = list()
             test_class.remove(getattr(p, str_list[0]))
         print(strarg)
         pobj = eval(strarg)
         attrib = str_list[0]
         code = getattr(pobj, attrib)
-        obj=test_class.current(code)
+        obj = test_class.current(code)
         test_class.insert(code)
 
     elif op == 'm':
@@ -113,19 +117,18 @@ while op != 'q':
         id = input(f'Record {attrib[1:]} = ') 
         if id != "":
             id = int(id)
-            obj=test_class.current(id)
+            obj = test_class.current(id)
             print('Leave blank or new value to modify')
             for attrib in str_list[1:]:
-                # attrib = str_list[i]
                 value = input(f'{attrib[1:]} = ') 
                 if value != "":
                     atype = type(getattr(p, attrib))
                     if atype == datetime.date:
-                        setattr(obj, attrib, datetime.date.fromisoformat(value))
+                        setattr(obj, attrib, datetime.ate.fromisoformat(value))
                     else:
                         setattr(obj, attrib, atype(value))
-        # id = getattr(obj, test_class.att[0][1:])
         test_class.update(id)
+        
     elif op == 'r':
         str_list = list(p.__dict__.keys())
         attrib = str_list[0]
@@ -136,23 +139,24 @@ while op != 'q':
             print('Confirm that you want to delete the record (y/n)?', end='')
             if input().upper() == 'Y':
                 test_class.remove(cod)
+                
     elif op == 'l':
         for code in test_class.lst:
             print(test_class.obj[code])
+            
     elif op == 's':
-        # Sort products by attribute in ascending order
         attrib = input('sort by attribute name:')
         if '_' + attrib in list(p.__dict__.keys()):
             reverse = False
             if input('Reverse (False):'):
                 reverse = True
-            codep = p.id         # Keep the position
+            codep = p.id         
             test_class.sort(attrib, reverse)
             for code in test_class.lst:
                 print(test_class.obj[code])
             test_class.current(codep)
+            
     elif op == 'f':
-        # Find objects with a given value in an attribute
         attrib = input('Attribute name:')
         if '_' + attrib in list(p.__dict__.keys()):
             atype = type(getattr(p, attrib))
@@ -162,4 +166,3 @@ while op != 'q':
                 test_class.current(fobjs[0].id)
                 for obj in fobjs:
                     print(obj)
-
