@@ -11,36 +11,32 @@ from classes.participation import Participation
 from classes.theme import Theme
 from classes.sponsor import Sponsor
 
-# =============================================================================
-# 1. CARREGAMENTO PRÉVIO DE DADOS
-# =============================================================================
+
 Podcast.read('data/DadaBase_Podcast.db')
 Guest.read('data/DadaBase_Podcast.db')
 
-# --- OPÇÃO A: TESTAR PARTICIPATION ---
-# test_class = Participation
-# ob = '150;983;2026-05-12;500'  # podcast_id(150); guest_id(983); data; quantidade
 
-# --- OPÇÃO B: TESTAR GUEST ---
+# test_class = Participation
+# ob = '150;983;2026-05-12;500'  
+
+
 # test_class = Guest
 # ob = '999;Nome do Convidado'
 
-# --- OPÇÃO C: TESTAR PODCAST ---
+
 test_class = Podcast
 ob = '200;O Meu Novo Podcast;Saude;2026-05-12'
 
-# --- OPÇÃO D: TESTAR SPONSOR  ---
+
 # test_class = Sponsor
-# ob = '0;150;Anuncio de 30 segundos'  # id(0 para auto); podcast_id(150); info
+# ob = '0;150;Anuncio de 30 segundos'  
 
-# --- OPÇÃO E: TESTAR THEME---
+
 # test_class = Theme
-# ob = '0;Tecnologia;150'  # id(0 para auto); subject; podcast_id(150)
+# ob = '0;Tecnologia;150'  
 
 
-# =============================================================================
-# 3. INTERFACE DO MENU 
-# =============================================================================
+
 test_class.read('data/DadaBase_Podcast.db')
 
 op = ''
