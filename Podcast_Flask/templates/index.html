@@ -1,11 +1,6 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Podcast Management Dashboard</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
-        
+{% extends 'base.html' %}
+
+{% block title %}
         <style>
             .dashboard-container {
                 display: flex;
@@ -31,9 +26,7 @@
                 transition: all 0.3s ease;
             }
 
-            /* ==========================================
-               ESTILOS DO MODAL INTERATIVO
-               ========================================== */
+            
             .modal-overlay {
                 position: fixed;
                 top: 0;
@@ -121,8 +114,9 @@
                 background-color: #ffe4ec;
             }
         </style>
-    </head>
-    <body>
+{% endblock %}
+
+{% block content %}
         
         <div class="dashboard-container">
             
@@ -174,9 +168,7 @@
 
         </div>
 
-        <!-- ==========================================
-             ESTRUTURA DO POP-UP (MODAL) DE EXIT
-             ========================================== -->
+        
         <div class="modal-overlay" id="exitModal">
             <div class="modal-box">
                 <h2>Saír? 🌸</h2>
@@ -188,9 +180,6 @@
             </div>
         </div>
 
-        <!-- ==========================================
-             JAVASCRIPT
-             ========================================== -->
         <script>
             // 1. Funções do Modal de Exit Interativo
             function abrirModalExit(event) {
@@ -225,5 +214,4 @@
                 input.addEventListener('blur', () => card.classList.remove('input-focado'));
             });
         </script>
-    </body>
-</html>
+{% endblock %}
