@@ -3,7 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Podcast Flask</title>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    
     {% block title %}
     {% endblock %}
   </head>
@@ -15,10 +17,11 @@
         {% else %}
           <li><a class="button" href="/logoff">Logoff</a></li>
           <li><a class="button" href="/Userlogin">Users</a></li>
-          <li><a class="button" style="color:lightblue">User: {{ulogin}}</a></li>
+          <li><a class="button" style="color:#ff6595; font-weight: bold;">User: {{ulogin}}</a></li>
         {% endif %}
       </ul>
     </nav>
+    
     {% block content %}
     {% endblock %}
   </body>
