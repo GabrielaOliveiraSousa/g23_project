@@ -10,7 +10,7 @@ def apps_plotly():
 
     
 
-    DATABASE = "DadaBase_Podcast.db"
+    DATABASE = filename + "DadaBase_Podcast.db"
 
     TABLE= "Participation"
 
