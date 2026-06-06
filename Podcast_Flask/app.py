@@ -41,14 +41,20 @@ def chklogin():
         return render_template("index.html", ulogin=session.get("user"))
     return render_template("login.html", user=user, password = password, ulogin=session.get("user"),resul = resul)
 @app.route("/Person", methods=["post","get"])
-def person():
-    return apps_person()
+def podcast():
+    return apps_podcast()
 @app.route("/gform/<cname>", methods=["post","get"])
 def gform(cname):
     return apps_gform(cname)
 @app.route("/subform/<cname>", methods=["post","get"])
 def subform(cname):
     return apps_subform(cname)
+@app.route("/plot", methods=["post","get"])
+def plot():
+    return apps_plot()
+@app.route("/plotly", methods=["post", "get"])
+def plotly():
+    return apps_plotly()          
 @app.route("/Userlogin", methods=["post","get"])
 def userlogin():
     return apps_userlogin()
