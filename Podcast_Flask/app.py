@@ -40,7 +40,7 @@ def chklogin():
         session["user"] = user
         return render_template("index.html", ulogin=session.get("user"))
     return render_template("login.html", user=user, password = password, ulogin=session.get("user"),resul = resul)
-@app.route("/Person", methods=["post","get"])
+@app.route("/Podcast", methods=["post","get"])
 def podcast():
     return apps_podcast()
 @app.route("/gform/<cname>", methods=["post","get"])
