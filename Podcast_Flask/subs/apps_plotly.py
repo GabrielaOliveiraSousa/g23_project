@@ -10,11 +10,11 @@ def apps_plotly():
 
     
 
-    DATABASE = "DataBase_Podcast.db"
+    DATABASE = "DadaBase_Podcast.db"
 
     TABLE = "Participation"
 
-    X_COLUMN = "guest_id"      # coluna para agrupar
+    X_COLUMN = "guest_id"      
     Y_LABEL = "Participações"
 
     GRAPH_TITLE = "Top 10 Convidados com Mais Participações"
@@ -47,8 +47,12 @@ def apps_plotly():
     fig.update_layout(
         template='plotly_white',
         showlegend=False,
-        yaxis={'categoryorder': 'total ascending'}
+        yaxis={'categoryorder': 'total ascending'},
+        height=700,
+        bargap=0.15,
+        margin=dict(l=120,r=40,t=80,b=40
     )
+
 
     fig.update_traces(
         texttemplate='%{x}',
