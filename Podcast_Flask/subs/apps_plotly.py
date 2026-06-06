@@ -132,9 +132,12 @@ def apps_plotly():
 
     # GRÁFICO 3
    df3 = pd.read_sql("""
-        SELECT subject, COUNT(*) as total_participantes
-        FROM Theme
-        GROUP BY subject
+        SELECT 
+            t.subject,
+            COUNT(p.guest_id) AS total_participantes
+        FROM Participation p
+        JOIN Theme t ON p.theme_id = t.id
+        GROUP BY t.subject
         ORDER BY total_participantes DESC
     """, con=engine)
 
