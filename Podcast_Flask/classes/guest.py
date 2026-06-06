@@ -13,6 +13,7 @@ class Guest(Gclass):
     sortkey = ''
     att = ['_id','_name']
     header = 'Guest'
+    des = ['Id', 'Name']
     def __init__(self, id, name):
         super().__init__()
         id = Guest.get_id(id)
