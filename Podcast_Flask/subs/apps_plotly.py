@@ -12,7 +12,7 @@ def apps_plotly():
 
     DATABASE = filename + "DadaBase_Podcast.db"
 
-    TABLE= "Participation"
+    TABLE_1= "Participation"
 
     engine = create_engine(f"sqlite:///{DATABASE}")
 
@@ -22,11 +22,11 @@ def apps_plotly():
     GRAPH_TITLE = "Top 10 Convidados com Mais Participações"
 
 
-    df = pd.read_sql(f"SELECT * FROM {TABLE}", con=engine)
+    df1 = pd.read_sql(f"SELECT * FROM {TABLE_1}", con=engine)
 
     #GRÁFICO 1
     dados = (
-        df[X_COLUMN]
+        df1[X_COLUMN]
         .value_counts()
         .head(10)
         .reset_index()
@@ -65,27 +65,34 @@ def apps_plotly():
     )
 
     # GRÁFICO 2 
-
+    df2 = pd.read_sql("""
+    SELECT 
+        t.subject,
+        p.amount
+    FROM Participation p
+    JOIN Theme t ON p.theme_id = t.id
+    """, con=engine)
+    
     df_metricas = (
-        df.groupby('subject')['amount']
+        df2.groupby('subject')['amount']
         .agg(['mean', 'max', 'min'])
         .reset_index()
     )
-
+    
     df_metricas.columns = [
         'Tema',
         'Média',
         'Máximo',
         'Mínimo'
     ]
-
+    
     df_melt = df_metricas.melt(
         id_vars='Tema',
         value_vars=['Média', 'Máximo', 'Mínimo'],
         var_name='Métrica',
         value_name='Valor'
     )
-
+    
     fig2 = px.bar(
         df_melt,
         x='Tema',
@@ -100,11 +107,11 @@ def apps_plotly():
             'lightpink'
         ]
     )
-
+    
     fig2.update_traces(
         textposition='outside'
     )
-
+    
     fig2.update_layout(
         template='plotly_white',
         height=650,
@@ -118,17 +125,17 @@ def apps_plotly():
             range=[0, df_melt['Valor'].max() * 1.15]
         )
     )
-
+    
     plot_div2 = fig2.to_html(
         full_html=False,
         div_id='my-plot2'
     )
-
+    
 
     # GRÁFICO 3
     
     df_participantes = (
-        df.groupby('subject')
+        df1.groupby('subject')
         .size()
         .reset_index(name='total_participantes')
     )
@@ -180,9 +187,12 @@ def apps_plotly():
 
 
     # GRÁFICO 4
+    TABLE_4= "Podcast"
+    df4 = pd.read_sql(f"SELECT * FROM {TABLE_4}", con=engine)
+
 
     top_categorias = (
-        df['category']
+        df4['category']
         .value_counts()
         .head(5)
         .reset_index(name='Total')
@@ -232,3 +242,4 @@ def apps_plotly():
         plot_div4=plot_div4,
         ulogin=session.get("user")
     )
+
