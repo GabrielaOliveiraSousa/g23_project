@@ -12,7 +12,7 @@ def apps_plotly():
 
     DATABASE = "DadaBase_Podcast.db"
 
-    TABLE_1 = "Participation"
+    TABLE= "Participation"
 
     engine = create_engine(f"sqlite:///{DATABASE}")
 
@@ -22,11 +22,11 @@ def apps_plotly():
     GRAPH_TITLE = "Top 10 Convidados com Mais Participações"
 
 
-    df_1 = pd.read_sql(f"SELECT * FROM {TABLE_1}", con=engine)
+    df = pd.read_sql(f"SELECT * FROM {TABLE}", con=engine)
 
     #GRÁFICO 1
     dados = (
-        df_1[X_COLUMN]
+        df[X_COLUMN]
         .value_counts()
         .head(10)
         .reset_index()
@@ -65,12 +65,9 @@ def apps_plotly():
     )
 
     # GRÁFICO 2 
-    
-    TABLE_2 = "Podcast"
-    df_2 = pd.read_sql(f"SELECT * FROM {TABLE_2}", con=engine)
 
     df_metricas = (
-        df_2.groupby('subject')['amount']
+        df.groupby('subject')['amount']
         .agg(['mean', 'max', 'min'])
         .reset_index()
     )
@@ -181,10 +178,57 @@ def apps_plotly():
         div_id='my-plot3'
     )
 
+
+    # GRÁFICO 4
+
+    top_categorias = (
+        df['category']
+        .value_counts()
+        .head(5)
+        .reset_index(name='Total')
+    )
+    
+    fig4 = px.bar(
+        top_categorias,
+        x='Total',
+        y='category',
+        orientation='h',
+        title='As 5 Categorias Mais Comuns no Projeto',
+        labels={
+            'Total': 'Número de Podcasts',
+            'category': 'Categoria'
+        },
+        color='Total',
+        color_continuous_scale='Blues'
+    )
+    
+    fig4.update_layout(
+        template='plotly_white',
+        yaxis={'categoryorder': 'total ascending'},
+        showlegend=False,
+        height=550,
+        margin=dict(
+            t=80,
+            b=50,
+            l=120,
+            r=50
+        )
+    )
+    
+    fig4.update_traces(
+        texttemplate='%{x}',
+        textposition='outside'
+    )
+    
+    plot_div4 = fig4.to_html(
+        full_html=False,
+        div_id='my-plot4'
+    )
     return render_template(
         "plotly.html",
         plot_div1=plot_div1,
         plot_div2=plot_div2,
         plot_div3=plot_div3,
+        plot_div4=plot_div4,
         ulogin=session.get("user")
     )
