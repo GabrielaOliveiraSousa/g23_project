@@ -131,27 +131,15 @@ def apps_plotly():
     
 
     # GRÁFICO 3
-    df3=pd.read_sql("""
-        SELECT t.subject, COUNT(*) as total_participantes
-        FROM Participation p
-        JOIN Theme t ON p.podcast_id = t.podcast_id
-        GROUP BY t.subject
+   df3 = pd.read_sql("""
+        SELECT subject, COUNT(*) as total_participantes
+        FROM Theme
+        GROUP BY subject
         ORDER BY total_participantes DESC
     """, con=engine)
-    
-    df_participantes = (
-        df3.groupby('subject')
-        .size()
-        .reset_index(name='total_participantes')
-    )
-    
-    df_participantes = df_participantes.sort_values(
-        by='total_participantes',
-        ascending=False
-    )
-    
+
     fig3 = px.bar(
-        df_participantes,
+        df3,
         x='subject',
         y='total_participantes',
         title='Número Total de Participantes por Tema',
@@ -159,36 +147,17 @@ def apps_plotly():
         color_continuous_scale='Bluered',
         text_auto=True
     )
-    
-    fig3.update_traces(
-        width=0.6,
-        textposition='outside'
-    )
-    
+    fig3.update_traces(width=0.6, textposition='outside')
     fig3.update_layout(
         template='plotly_white',
         height=550,
-        margin=dict(
-            t=100,
-            b=50,
-            l=50,
-            r=50
-        ),
+        margin=dict(t=100, b=50, l=50, r=50),
         xaxis_title="Tema",
         yaxis_title="Total de Participantes",
-        yaxis=dict(
-            range=[
-                0,
-                df_participantes['total_participantes'].max() * 1.15
-            ]
-        ),
+        yaxis=dict(range=[0, df3['total_participantes'].max() * 1.15]),
         coloraxis_showscale=False
     )
-    
-    plot_div3 = fig3.to_html(
-        full_html=False,
-        div_id='my-plot3'
-    )
+    plot_div3 = fig3.to_html(full_html=False, div_id='my-plot3')
 
 
     # GRÁFICO 4
