@@ -14,12 +14,12 @@ from subs.apps_userlogin import apps_userlogin
 
 app = Flask(__name__)
 
-Person.read(filename + 'Person.db')
-Customer.read(filename + 'business.db')
-Product.read(filename + 'business.db')
-CustomerOrder.read(filename + 'business.db')
-OrderProduct.read(filename + 'business.db')
-Userlogin.read(filename + 'business.db')
+Podcast.read(filename + 'DadaBase_Podcast.db')
+Guest.read(filename + 'DadaBase_Podcast.db')
+Particiption.read(filename + 'DadaBase_Podcast.db')
+Sponsor.read(filename + 'DadaBase_Podcast.db')
+Theme.read(filename + 'DadaBase_Podcast.db')
+Userlogin.read(filename + 'DadaBase_Podcast.db')
 app.secret_key = 'BAD_SECRET_KEY'
 @app.route("/")
 def index():
