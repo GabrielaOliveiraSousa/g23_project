@@ -11,21 +11,39 @@ from sqlalchemy import create_engine
 import plotly.express as px
 
 def apps_plotly():
-  df = pd.read_csv('g23_Podcasts_Guests.csv', sep=';', header=1)
-  df.columns = df.columns.str.strip()
-  
-  df['date'] = pd.to_datetime(df['date'], dayfirst=True, errors='coerce')
-  df['creation_date'] = pd.to_datetime(df['creation_date'], dayfirst=True, errors='coerce')
 
-  top_convidados = df['name'].value_counts().head(10).reset_index()
-  top_convidados.columns = ['Convidado', 'Participações']
-    
-  fig_participacoes = px.bar(top_convidados,x='Participações', y='Convidado', orientation='h',title='Top 10 Convidados com Mais Participações no Podcast',labels={'Participações': 'Número de Episódios', 'Convidado': 'Nome do Convidado'},color='Participações',color_continuous_scale='Tealgrn')
-  
-  fig_participacoes.update_layout(yaxis={'categoryorder': 'total ascending'}, showlegend=False,template='plotly_white')
-  fig_participacoes.update_traces(texttemplate='%{x}', textposition='outside')
+    engine = create_engine('sqlite:///' + filename + 'podcast.db')
 
-  plot_div = fig_participacoes.to_html(full_html=False, div_id='my-plot')
+    df_guest = pd.read_sql('Guest', con=engine)
+    df_participation = pd.read_sql('Participation', con=engine)
 
+    participacoes = (
+        df_participation
+        .groupby('guest_id')
+        .size()
+        .reset_index(name='Participações')
+    )
 
-  return render_template("plotly.html", plot_div=plot_div, ulogin=session.get("user"))
+    participacoes = participacoes.merge(
+        df_guest[['id', 'name']],
+        left_on='guest_id',
+        right_on='id'
+    )
+
+    top_convidados = participacoes.nlargest(10, 'Participações')
+
+    fig = px.bar(
+        top_convidados,
+        x='Participações',
+        y='name',
+        orientation='h',
+        title='Top 10 Convidados com Mais Participações'
+    )
+
+    plot_div = fig.to_html(full_html=False, div_id='my-plot')
+
+    return render_template(
+        "plotly.html",
+        plot_div=plot_div,
+        ulogin=session.get("user")
+    )
