@@ -56,7 +56,7 @@ def plot():
 def plotly():
     return apps_plotly()          
 @app.route("/Userlogin", methods=["post","get"])
-def userlogin():
+def userlogin_route():
     return apps_userlogin()
 if __name__ == '__main__':
     app.run()
