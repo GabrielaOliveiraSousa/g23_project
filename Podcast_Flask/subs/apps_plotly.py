@@ -11,6 +11,12 @@ from sqlalchemy import create_engine
 import plotly.express as px
 
 def apps_plotly():
+  df = pd.read_csv('podcast2.csv', sep=';', header=1)
+  df.columns = df.columns.str.strip()
+  
+  df['date'] = pd.to_datetime(df['date'], dayfirst=True, errors='coerce')
+  df['creation_date'] = pd.to_datetime(df['creation_date'], dayfirst=True, errors='coerce')
+
   top_convidados = df['name'].value_counts().head(10).reset_index()
   top_convidados.columns = ['Convidado', 'Participações']
     
