@@ -66,11 +66,9 @@ def apps_plotly():
 
     # GRÁFICO 2 
     df2 = pd.read_sql("""
-    SELECT 
-        t.subject,
-        p.amount
-    FROM Participation p
-    JOIN Theme t ON p.theme_id = t.id
+        SELECT t.subject, p.amount
+        FROM Participation p
+        JOIN Theme t ON p.podcast_id = t.podcast_id
     """, con=engine)
     
     df_metricas = (
@@ -133,9 +131,16 @@ def apps_plotly():
     
 
     # GRÁFICO 3
+    df3=pd.read_sql("""
+        SELECT t.subject, COUNT(*) as total_participantes
+        FROM Participation p
+        JOIN Theme t ON p.podcast_id = t.podcast_id
+        GROUP BY t.subject
+        ORDER BY total_participantes DESC
+    """, con=engine)
     
     df_participantes = (
-        df1.groupby('subject')
+        df3.groupby('subject')
         .size()
         .reset_index(name='total_participantes')
     )
