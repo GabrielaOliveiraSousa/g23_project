@@ -1,14 +1,37 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
 {% endblock %}
 
 {% block content %}
-            {{ plot_div | safe }}
-            <br>
-            <div style="text-align: center;">
-                <a class="button" href="/">Back</a></li>
-            </div>
+
+<div style="width:90%; margin:auto;">
+    {{ plot_div1 | safe }}
+</div>
+
+<br><br>
+
+<div style="width:90%; margin:auto;">
+    {{ plot_div2 | safe }}
+</div>
+
+<br><br>
+
+<div style="width:90%; margin:auto;">
+    {{ plot_div3 | safe }}
+</div>
+
+<br><br>
+
+<div style="width:90%; margin:auto;">
+    {{ plot_div4 | safe }}
+</div>
+
+<br><br>
+
+<div style="text-align: center;">
+    <a class="button" href="/">Back</a>
+</div>
 
 {% endblock %}
