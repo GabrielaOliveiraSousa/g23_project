@@ -11,6 +11,7 @@ from subs.apps_podcast import apps_podcast
 from subs.apps_gform import apps_gform 
 from subs.apps_subform import apps_subform 
 from subs.apps_userlogin import apps_userlogin
+from subs.apps_plotly import apps_plotly
 
 app = Flask(__name__)
 
