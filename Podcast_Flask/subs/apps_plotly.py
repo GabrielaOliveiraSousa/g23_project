@@ -11,7 +11,7 @@ from sqlalchemy import create_engine
 import plotly.express as px
 
 def apps_plotly():
-  df = pd.read_csv('podcast2.csv', sep=';', header=1)
+  df = pd.read_csv('g23_Podcasts_Guests.csv', sep=';', header=1)
   df.columns = df.columns.str.strip()
   
   df['date'] = pd.to_datetime(df['date'], dayfirst=True, errors='coerce')
