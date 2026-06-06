@@ -8,7 +8,7 @@ def apps_plotly():
     df = pd.read_csv('g23_Podcasts_Guests.csv', sep=';', header=1)
     df.columns = df.columns.str.strip()
 
-    print(df.columns.tolist())  # para verificar as colunas
+    print(df.columns.tolist()) 
 
     df['date'] = pd.to_datetime(df['date'], dayfirst=True, errors='coerce')
     df['creation_date'] = pd.to_datetime(df['creation_date'], dayfirst=True, errors='coerce')
