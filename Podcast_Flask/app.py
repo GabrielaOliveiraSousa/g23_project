@@ -16,7 +16,7 @@ app = Flask(__name__)
 
 Podcast.read(filename + 'DadaBase_Podcast.db')
 Guest.read(filename + 'DadaBase_Podcast.db')
-Particiption.read(filename + 'DadaBase_Podcast.db')
+Participation.read(filename + 'DadaBase_Podcast.db')
 Sponsor.read(filename + 'DadaBase_Podcast.db')
 Theme.read(filename + 'DadaBase_Podcast.db')
 Userlogin.read(filename + 'DadaBase_Podcast.db')
