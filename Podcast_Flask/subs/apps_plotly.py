@@ -12,7 +12,7 @@ import plotly.express as px
 
 def apps_plotly():
 
-    engine = create_engine('sqlite:///' + filename + 'podcast.db')
+    engine = create_engine('sqlite:///' + filename + 'DadaBase_Podcast.db')
 
     df_guest = pd.read_sql('Guest', con=engine)
     df_participation = pd.read_sql('Participation', con=engine)
@@ -25,9 +25,9 @@ def apps_plotly():
     )
 
     participacoes = participacoes.merge(
-        df_guest[['id', 'name']],
+        df_guest[['guest_id', 'name']],
         left_on='guest_id',
-        right_on='id'
+        right_on='guest_id'
     )
 
     top_convidados = participacoes.nlargest(10, 'Participações')
