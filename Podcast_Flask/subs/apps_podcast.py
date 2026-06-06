@@ -3,7 +3,7 @@ from classes.podcast import Podcast
 
 prev_option = ""
 
-def apps_person():
+def apps_podcast():
     global prev_option
     ulogin=session.get("user")
     if (ulogin != None):
