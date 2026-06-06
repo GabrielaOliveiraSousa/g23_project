@@ -34,7 +34,7 @@ class Gclass:
     @classmethod
     def get_id(cls, id):
         # Compute the auto increment
-        id = int(id)
+        id = int(float(id))
         if id == 0:
             if len(cls.lst) == 0:
                 id = 1
