@@ -5,7 +5,7 @@ from classes.userlogin import Userlogin
 
 app = Flask(__name__)
 @app.route("/Userlogin", methods=["post","get"])
-def userlogin():
+def apps_userlogin():
     global prev_option
     msg = ""
     ulogin=session.get("user")
