@@ -1,46 +1,64 @@
 from flask import render_template, session
-from classes.podcast import Podcast
-from classes.sponsor import Sponsor
-from classes.theme import Theme
-from classes.participation import Participation
-from classes.guest import Guest
 from datafile import filename
 
 import pandas as pd
 from sqlalchemy import create_engine
 import plotly.express as px
 
+
 def apps_plotly():
 
-    engine = create_engine('sqlite:///' + filename + 'DadaBase_Podcast.db')
+    
 
-    df_guest = pd.read_sql('Guest', con=engine)
-    df_participation = pd.read_sql('Participation', con=engine)
+    DATABASE = "DataBase_Podcast.db"
 
-    participacoes = (
-        df_participation
-        .groupby('guest_id')
-        .size()
-        .reset_index(name='Participações')
+    TABLE = "Participation"
+
+    X_COLUMN = "guest_id"      # coluna para agrupar
+    Y_LABEL = "Participações"
+
+    GRAPH_TITLE = "Top 10 Convidados com Mais Participações"
+
+    
+
+    engine = create_engine(f"sqlite:///{DATABASE}")
+
+    df = pd.read_sql(f"SELECT * FROM {TABLE}", con=engine)
+
+    dados = (
+        df[X_COLUMN]
+        .value_counts()
+        .head(10)
+        .reset_index()
     )
 
-    participacoes = participacoes.merge(
-        df_guest[['guest_id', 'name']],
-        left_on='guest_id',
-        right_on='guest_id'
-    )
-
-    top_convidados = participacoes.nlargest(10, 'Participações')
+    dados.columns = [X_COLUMN, Y_LABEL]
 
     fig = px.bar(
-        top_convidados,
-        x='Participações',
-        y='name',
+        dados,
+        x=Y_LABEL,
+        y=X_COLUMN,
         orientation='h',
-        title='Top 10 Convidados com Mais Participações'
+        title=GRAPH_TITLE,
+        color=Y_LABEL,
+        color_continuous_scale='Tealgrn'
     )
 
-    plot_div = fig.to_html(full_html=False, div_id='my-plot')
+    fig.update_layout(
+        template='plotly_white',
+        showlegend=False,
+        yaxis={'categoryorder': 'total ascending'}
+    )
+
+    fig.update_traces(
+        texttemplate='%{x}',
+        textposition='outside'
+    )
+
+    plot_div = fig.to_html(
+        full_html=False,
+        div_id='my-plot'
+    )
 
     return render_template(
         "plotly.html",
