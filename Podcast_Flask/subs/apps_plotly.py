@@ -50,7 +50,7 @@ def apps_plotly():
         yaxis={'categoryorder': 'total ascending'},
         height=700,
         bargap=0.15,
-        margin=dict(l=120,r=40,t=80,b=40
+        margin=dict(l=120,r=40,t=80,b=40)
     )
 
 
