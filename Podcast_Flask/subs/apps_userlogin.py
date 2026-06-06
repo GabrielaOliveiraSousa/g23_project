@@ -3,8 +3,7 @@ from datafile import filename
 from classes.userlogin import Userlogin
 
 
-app = Flask(__name__)
-@app.route("/Userlogin", methods=["post","get"])
+prev_option = ""
 def apps_userlogin():
     global prev_option
     msg = ""
