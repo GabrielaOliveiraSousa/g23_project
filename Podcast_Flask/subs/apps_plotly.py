@@ -47,38 +47,47 @@ def apps_plotly():
     DATABASE = filename + "DadaBase_Podcast.db"
     engine = create_engine(f"sqlite:///{DATABASE}")
 
-    # GRÁFICO 1 
-    X_COLUMN = "guest_id"
+# GRÁFICO 1 
     Y_LABEL = "Participações"
     GRAPH_TITLE = "Top 10 Convidados com Mais Participações"
 
-    df1 = pd.read_sql("SELECT * FROM Participation", con=engine)
+    df_participation = pd.read_sql("SELECT * FROM Participation", con=engine)
+    df_guests = pd.read_sql("SELECT * FROM Guest", con=engine)
 
+    df_combined = pd.merge(df_participation, df_guests, on='guest_id')
+
+    # 3. Agrupar por nome e contar podcasts únicos 
     dados = (
-        df1[X_COLUMN]
-        .value_counts()
+        df_combined.groupby('name')['podcast_id']
+        .nunique()
+        .sort_values(ascending=False)
         .head(10)
         .reset_index()
     )
-    dados.columns = [X_COLUMN, Y_LABEL]
+    dados.columns = ['guest_name', Y_LABEL]
 
-    dados = dados.sort_values(Y_LABEL)
-    dados[X_COLUMN] = dados[X_COLUMN].astype(str)
-    id_order = dados[X_COLUMN].tolist()
+  
+    dados = dados.sort_values(by=Y_LABEL, ascending=True)
+    name_order = dados['guest_name'].tolist()
 
+  
     fig1 = px.bar(
-        dados, x=Y_LABEL, y=X_COLUMN, orientation='h',
+        dados, x=Y_LABEL, y='guest_name', orientation='h',
         title=GRAPH_TITLE, color=Y_LABEL, color_continuous_scale=PINK_SCALE,
     )
+    
     fig1.update_layout(
         showlegend=False,
         coloraxis_showscale=False,
         bargap=0.12,
-        yaxis={'type': 'category', 'categoryorder': 'array',
-               'categoryarray': id_order, 'title': None},
+        yaxis=dict(
+            categoryorder='array', 
+            categoryarray=name_order,
+            title=None
+        )
     )
-    fig1.update_traces(texttemplate='%{x}', textposition='outside',
-                       cliponaxis=False)
+    
+    fig1.update_traces(texttemplate='%{x}', textposition='outside', cliponaxis=False)
     _style(fig1)
     plot_div1 = _to_html(fig1, 'my-plot1', first=True)
 
