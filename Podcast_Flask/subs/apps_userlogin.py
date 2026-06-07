@@ -77,5 +77,3 @@ def apps_userlogin():
     else:
         return render_template("index.html", ulogin=ulogin)
 
-if __name__=='__main__':
-    app.run()
