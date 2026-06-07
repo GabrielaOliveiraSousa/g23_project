@@ -1,25 +1,25 @@
 {% extends 'base.html' %}
 
-{% block title %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
-{% endblock %}
-
 {% block content %}
-    <div class = "dados">
-        <br><br>
-        <h1>Login</h1>
-        <br>
+    <div class="dados">
+        <div class="card-head card-head-center">
+            <img class="card-icon" src="{{ url_for('static', filename='images/login.png') }}" alt="login">
+            <h1>Login</h1>
+        </div>
         <form id="form" action="/chklogin" method="post">
-            <label for="user">User:</label>
-            <input type="text" id="user" name="user"  value = "{{user}}" size="30"/>
-            <br><br>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" value = "{{password}}" size="30"/>
-            <br><br>
-            <button type="submit" class="button1">Login</button>
+            <div class="field">
+                <label for="user">User:</label>
+                <input type="text" id="user" name="user" value="{{user}}"/>
+            </div>
+            <div class="field">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" value="{{password}}"/>
+            </div>
+            <div class="toolbar toolbar-center">
+                <button type="submit" class="button1 button1-accent">Login</button>
+            </div>
         </form>
-        <br><br>
-        <h3 style="color: red;">{{resul}}</h3>
+        <h3 class="error-msg">{{resul}}</h3>
     </div>
 {% endblock %}
 
