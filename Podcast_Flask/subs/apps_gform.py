@@ -51,6 +51,8 @@ def apps_gform(cname=''):
                 cl.nextrec()
             elif option == "last":
                 cl.last()
+             elif option == 'check_participation':
+                pass
             elif option == 'exit':
                 return render_template("index.html", ulogin=session.get("user"))
         prev_option = option
