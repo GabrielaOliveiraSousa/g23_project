@@ -6,167 +6,144 @@ from sqlalchemy import create_engine
 import plotly.express as px
 
 
+PINK_SCALE = [[0.0, '#ffd9e6'], [0.5, '#ff9cbb'], [1.0, '#ff6595']]
+PINK_DISCRETE = ['#ff6595', '#ff9bb6', '#ffd0dd']
+FONT_FAMILY = "Segoe UI, system-ui, -apple-system, sans-serif"
+TEXT_COLOR = '#4a3e41'
+ACCENT = '#ff6595'
+
+PLOT_CONFIG = {'responsive': True, 'displayModeBar': False}
+
+
+def _style(fig):
+    fig.update_layout(
+        template='plotly_white',
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        font=dict(family=FONT_FAMILY, color=TEXT_COLOR, size=11),
+        title=dict(font=dict(color=ACCENT, size=14, family=FONT_FAMILY),
+                   x=0.5, xanchor='center'),
+        margin=dict(l=60, r=20, t=46, b=36),
+        autosize=True,
+    )
+    fig.update_xaxes(gridcolor='#ffe4ec', zerolinecolor='#ffe4ec')
+    fig.update_yaxes(gridcolor='#ffe4ec', zerolinecolor='#ffe4ec')
+    return fig
+
+
+def _to_html(fig, div_id, first=False):
+    return fig.to_html(
+        full_html=False,
+        include_plotlyjs=True if first else False,
+        div_id=div_id,
+        default_height='100%',
+        default_width='100%',
+        config=PLOT_CONFIG,
+    )
+
+
 def apps_plotly():
 
-    
-
     DATABASE = filename + "DadaBase_Podcast.db"
-
-    TABLE_1= "Participation"
-
     engine = create_engine(f"sqlite:///{DATABASE}")
 
-    X_COLUMN = "guest_id"      
+    # GRÁFICO 1 
+    X_COLUMN = "guest_id"
     Y_LABEL = "Participações"
-
     GRAPH_TITLE = "Top 10 Convidados com Mais Participações"
 
+    df1 = pd.read_sql("SELECT * FROM Participation", con=engine)
 
-    df1 = pd.read_sql(f"SELECT * FROM {TABLE_1}", con=engine)
-
-    #GRÁFICO 1
     dados = (
         df1[X_COLUMN]
         .value_counts()
         .head(10)
         .reset_index()
     )
-
     dados.columns = [X_COLUMN, Y_LABEL]
 
+    dados = dados.sort_values(Y_LABEL)
+    dados[X_COLUMN] = dados[X_COLUMN].astype(str)
+    id_order = dados[X_COLUMN].tolist()
+
     fig1 = px.bar(
-        dados,
-        x=Y_LABEL,
-        y=X_COLUMN,
-        orientation='h',
-        title=GRAPH_TITLE,
-        color=Y_LABEL,
-        color_continuous_scale='Tealgrn'
+        dados, x=Y_LABEL, y=X_COLUMN, orientation='h',
+        title=GRAPH_TITLE, color=Y_LABEL, color_continuous_scale=PINK_SCALE,
     )
-
     fig1.update_layout(
-        template='plotly_white',
         showlegend=False,
-        yaxis={'categoryorder': 'total ascending'},
-        height=700,
-        bargap=0.15,
-        margin=dict(l=120,r=40,t=80,b=40)
+        coloraxis_showscale=False,
+        bargap=0.12,
+        yaxis={'type': 'category', 'categoryorder': 'array',
+               'categoryarray': id_order, 'title': None},
     )
+    fig1.update_traces(texttemplate='%{x}', textposition='outside',
+                       cliponaxis=False)
+    _style(fig1)
+    plot_div1 = _to_html(fig1, 'my-plot1', first=True)
 
-
-    fig1.update_traces(
-        texttemplate='%{x}',
-        textposition='outside'
-    )
-
-    plot_div1 = fig1.to_html(
-        full_html=False,
-        div_id='my-plot1'
-    )
-
-    # GRÁFICO 2 
+    # GRÁFICO 2
     df2 = pd.read_sql("""
         SELECT t.subject, p.amount
         FROM Participation p
         JOIN Theme t ON p.podcast_id = t.podcast_id
     """, con=engine)
-    
+
     df_metricas = (
         df2.groupby('subject')['amount']
         .agg(['mean', 'max', 'min'])
         .reset_index()
     )
-    
-    df_metricas.columns = [
-        'Tema',
-        'Média',
-        'Máximo',
-        'Mínimo'
-    ]
-    
-    df_melt = df_metricas.melt(
-        id_vars='Tema',
-        value_vars=['Média', 'Máximo', 'Mínimo'],
-        var_name='Métrica',
-        value_name='Valor'
-    )
-    
-    fig2 = px.bar(
-        df_melt,
-        x='Tema',
-        y='Valor',
-        color='Métrica',
-        barmode='group',
-        text_auto='.0f',
-        title='Análise por Tema: Média, Máximo e Mínimo',
-        color_discrete_sequence=[
-            'hotpink',
-            'deeppink',
-            'lightpink'
-        ]
-    )
-    
-    fig2.update_traces(
-        textposition='outside'
-    )
-    
-    fig2.update_layout(
-        template='plotly_white',
-        height=650,
-        margin=dict(
-            t=100,
-            b=50,
-            l=50,
-            r=50
-        ),
-        yaxis=dict(
-            range=[0, df_melt['Valor'].max() * 1.15]
-        )
-    )
-    
-    plot_div2 = fig2.to_html(
-        full_html=False,
-        div_id='my-plot2'
-    )
-    
+    df_metricas.columns = ['Tema', 'Média', 'Máximo', 'Mínimo']
 
-    # GRÁFICO 3
-   df3 = pd.read_sql("""
-        SELECT 
+    df_melt = df_metricas.melt(
+        id_vars='Tema', value_vars=['Média', 'Máximo', 'Mínimo'],
+        var_name='Métrica', value_name='Valor',
+    )
+
+    fig2 = px.bar(
+        df_melt, x='Tema', y='Valor', color='Métrica', barmode='group',
+        title='Análise por Tema: Média, Máximo e Mínimo',
+        color_discrete_sequence=PINK_DISCRETE,
+    )
+    fig2.update_layout(
+        legend=dict(orientation='h', yanchor='bottom', y=1.0,
+                    xanchor='right', x=1, title=None),
+        yaxis=dict(range=[0, df_melt['Valor'].max() * 1.15], title=None),
+        xaxis=dict(title=None),
+    )
+    _style(fig2)
+    plot_div2 = _to_html(fig2, 'my-plot2')
+
+    # GRÁFICO 3 
+    df3 = pd.read_sql("""
+        SELECT
             t.subject,
             COUNT(p.guest_id) AS total_participantes
         FROM Participation p
-        JOIN Theme t ON p.theme_id = t.id
+        JOIN Theme t ON p.podcast_id = t.podcast_id
         GROUP BY t.subject
         ORDER BY total_participantes DESC
     """, con=engine)
 
     fig3 = px.bar(
-        df3,
-        x='subject',
-        y='total_participantes',
+        df3, x='subject', y='total_participantes',
         title='Número Total de Participantes por Tema',
-        color='total_participantes',
-        color_continuous_scale='Bluered',
-        text_auto=True
+        color='total_participantes', color_continuous_scale=PINK_SCALE,
+        text_auto=True,
     )
-    fig3.update_traces(width=0.6, textposition='outside')
+    fig3.update_traces(width=0.6, textposition='outside', cliponaxis=False)
     fig3.update_layout(
-        template='plotly_white',
-        height=550,
-        margin=dict(t=100, b=50, l=50, r=50),
-        xaxis_title="Tema",
-        yaxis_title="Total de Participantes",
+        xaxis_title=None,
+        yaxis_title=None,
         yaxis=dict(range=[0, df3['total_participantes'].max() * 1.15]),
-        coloraxis_showscale=False
+        coloraxis_showscale=False,
     )
-    plot_div3 = fig3.to_html(full_html=False, div_id='my-plot3')
-
+    _style(fig3)
+    plot_div3 = _to_html(fig3, 'my-plot3')
 
     # GRÁFICO 4
-    TABLE_4= "Podcast"
-    df4 = pd.read_sql(f"SELECT * FROM {TABLE_4}", con=engine)
-
+    df4 = pd.read_sql("SELECT * FROM Podcast", con=engine)
 
     top_categorias = (
         df4['category']
@@ -174,49 +151,28 @@ def apps_plotly():
         .head(5)
         .reset_index(name='Total')
     )
-    
+
     fig4 = px.bar(
-        top_categorias,
-        x='Total',
-        y='category',
-        orientation='h',
+        top_categorias, x='Total', y='category', orientation='h',
         title='As 5 Categorias Mais Comuns no Projeto',
-        labels={
-            'Total': 'Número de Podcasts',
-            'category': 'Categoria'
-        },
-        color='Total',
-        color_continuous_scale='Blues'
+        labels={'Total': 'Número de Podcasts', 'category': 'Categoria'},
+        color='Total', color_continuous_scale=PINK_SCALE,
     )
-    
     fig4.update_layout(
-        template='plotly_white',
-        yaxis={'categoryorder': 'total ascending'},
         showlegend=False,
-        height=550,
-        margin=dict(
-            t=80,
-            b=50,
-            l=120,
-            r=50
-        )
+        coloraxis_showscale=False,
+        yaxis={'categoryorder': 'total ascending', 'title': None},
     )
-    
-    fig4.update_traces(
-        texttemplate='%{x}',
-        textposition='outside'
-    )
-    
-    plot_div4 = fig4.to_html(
-        full_html=False,
-        div_id='my-plot4'
-    )
+    fig4.update_traces(texttemplate='%{x}', textposition='outside',
+                       cliponaxis=False)
+    _style(fig4)
+    plot_div4 = _to_html(fig4, 'my-plot4')
+
     return render_template(
         "plotly.html",
         plot_div1=plot_div1,
         plot_div2=plot_div2,
         plot_div3=plot_div3,
         plot_div4=plot_div4,
-        ulogin=session.get("user")
+        ulogin=session.get("user"),
     )
-
