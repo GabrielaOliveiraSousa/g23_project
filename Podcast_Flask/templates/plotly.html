@@ -1,22 +1,15 @@
 {% extends 'base.html' %}
 
-{% block title %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
-{% endblock %}
-
 {% block content %}
-            {{ plot_div1 | safe }}
-            <br>
-            {{ plot_div2 | safe }}
-            <br>
-            {{ plot_div3 | safe }}
-            <br>
-            {{ plot_div4 | safe }}
-            <br>
-            <div style="text-align: center;">
-                <a class="button" href="/">Back</a></li>
-            </div>
-
+    <div class="dashboard-head">
+        <h1>Dashboard</h1>
+        <a class="button1" href="/">← Back</a>
+    </div>
+    <div class="plot-dashboard">
+        {{ plot_div1 | safe }}
+        {{ plot_div2 | safe }}
+        {{ plot_div3 | safe }}
+        {{ plot_div4 | safe }}
+    </div>
 {% endblock %}
-
 
