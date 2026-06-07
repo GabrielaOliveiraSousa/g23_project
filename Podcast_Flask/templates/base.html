@@ -5,17 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-    
+    <title>Podcast Manager</title>
+
     {% block title %}
     {% endblock %}
   </head>
   <body>
-    <nav>
+    <nav class="navbar">
+      <a class="brand" href="/">🎙️ Podcast<span>Manager</span></a>
       <ul class="menu">
         {% if ulogin == None %}
-          <li><a class="button" href="/login">Login</a></li>
+          <li class="nav-right"><a class="button button-accent" href="/login">Login</a></li>
         {% else %}
-          <li><a class="button" href="/logoff">Logoff</a></li>
           <li><a class="button" href="/gform/Guest">Guest</a></li>
           <li><a class="button" href="/gform/Participation">Participation</a></li>
           <li><a class="button" href="/gform/Podcast">Podcast</a></li>
@@ -23,13 +24,15 @@
           <li><a class="button" href="/gform/Theme">Theme</a></li>
           <li><a class="button" href="/plotly">Plotly</a></li>
           <li><a class="button" href="/Userlogin">Users</a></li>
-          <li><a class="button" style="color:#ff6595; font-weight: bold;">User: {{ulogin}}</a></li>
-                    
+          <li class="nav-right"><span class="user-badge">👤 {{ulogin}}</span></li>
+          <li><a class="button button-accent" href="/logoff">Logoff</a></li>
         {% endif %}
       </ul>
     </nav>
-    
-    {% block content %}
-    {% endblock %}
+
+    <main class="content">
+      {% block content %}
+      {% endblock %}
+    </main>
   </body>
 </html>
