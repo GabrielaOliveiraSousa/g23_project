@@ -36,4 +36,39 @@
             <button id="last" type="button" {{butshow}} onclick="window.location.href = '/gform/{{cname}}?option=last'" class="button1">Last</button>
         </div>
     </div>
+    {% if cname == 'Guest' %}
+        <div style="margin-top:20px;">
+            <button type="button" class="button1" onclick="window.location.href = '/gform/{{cname}}?option=check_participation'">
+                Participations
+            </button>
+
+            {% if participacoes is not none %}
+                {% if participacoes %}
+                    <p style="color:green; margin-top:15px;">
+                      This guest participated in <strong>{{ participacoes|length }}</strong> podcast(s):
+                    </p>
+                    <table border="1" cellpadding="8" style="border-collapse:collapse; width:100%; margin-top:10px;">
+                        <tr style="background:#f0f0f0;">
+                            <th>Podcast ID</th>
+                            <th>Data</th>
+                            <th>Amount</th>
+                        </tr>
+                        {% for p in participacoes %}
+                        <tr>
+                            <td>{{ p.podcast_id }}</td>
+                            <td>{{ p.creation_date }}</td>
+                            <td>{{ p.amount }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                {% else %}
+                    <p style="color:orange; margin-top:15px;">
+                         This guest never participated in any podcast.
+                    </p>
+                {% endif %}
+            {% endif %}
+        </div>
+        {% endif %}
+
+    </div>
 {% endblock %}
