@@ -57,17 +57,19 @@ def apps_gform(cname=''):
                 return render_template("index.html", ulogin=session.get("user"))
         prev_option = option
         obj = cl.current()
+        
+        participacoes = None
+        if cname == 'Guest' and option == 'check_participation':
+            if obj and type(obj) != dict:
+                participacoes = [p for p in Participation.obj.values() if p.guest_id == obj.id]
+
         if option == 'insert' or len(cl.lst) == 0:
             obj = dict()
             obj[cl.att[0]] = 0
             for i in range(1, len(cl.att)):
                 obj[cl.att[i]] = ""
-        # else:
-        #     for att in cl.att:
-        #         dobj[att[1:]] = getattr(obj, att)
-        # return render_template("gform.html", butshow=butshow, butedit=butedit, cname=cname, code=code,name = name,dob=dob,salary=salary)
-        return render_template("gform.html", butshow=butshow, butedit=butedit, cname=cname, obj=obj,att=cl.att,des=cl.des,ulogin=session.get("user"))
+        return render_template("gform.html", butshow=butshow, butedit=butedit, cname=cname, obj=obj, att=cl.att, des=cl.des, ulogin=session.get("user"), participacoes=participacoes)
     else:
         return render_template("index.html", ulogin=ulogin)
-# -*- coding: utf-8 -*-
+
 
