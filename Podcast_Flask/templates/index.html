@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
-{% block title %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
-{% endblock %}
-
 {% block content %}
-
-    <div class="dados">
-        <br><br>
-            <h1>Flask demo PCII</h1>
+    <div class="hero">
+        <div class="hero-icon">🎙️</div>
+        <h1>Podcast Manager</h1>
+        <p>Flask demo PCII — gestão de podcasts, convidados, temas e patrocinadores, com um dashboard de estatísticas.</p>
+        {% if ulogin == None %}
+            <a class="button1 button1-accent" href="/login">Entrar</a>
+        {% else %}
+            <a class="button1 button1-accent" href="/plotly">Ver Dashboard</a>
+        {% endif %}
     </div>
-    
 {% endblock %}
